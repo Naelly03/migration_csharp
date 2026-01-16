@@ -6,8 +6,8 @@ namespace MigrationProject
 {
     class Program
     {
-        static string connectionString = "Host=localhost;Port=5432;Database='';Username='';Password=''";
-        static string baseFolder = @"C:\Migration_Csharp";
+        static string connectionString = "Host=localhost;Port=5432;Database='pluspdv_migration';Username='postgres';Password='admg2'";
+        static string baseFolder = @"C:\Migration";
 
         static void Main(string[] args)
         {
@@ -42,12 +42,21 @@ namespace MigrationProject
 
                 //Console.WriteLine("---------------------------------------------------------");
 
-                ///5. Financeiro (Contas a Receber)
-                new FinanceiroService(connectionString)
-                   .ExecutarMigracao(
-                       Path.Combine(baseFolder, "Clientes.csv"),
-                        Path.Combine(baseFolder, "ContasReceber.csv")
-                    );
+                //////// 5. Produtos (Atualizar Código de Barras e Referência) - NOVO!
+                // O arquivo deve ter as colunas: Id_PRO, Nome_PRO, EAN, Referencia_Fabrica
+                new ProdutoUpdateService(connectionString)
+                   .AtualizarCodigoBarrasEReferencia(
+                       Path.Combine(baseFolder, "AtualizarCod.csv")
+                   );
+
+                Console.WriteLine("---------------------------------------------------------");
+
+                ///6. Financeiro (Contas a Receber)
+                //new FinanceiroService(connectionString)
+                //   .ExecutarMigracao(
+                //       Path.Combine(baseFolder, "Clientes.csv"),
+                //        Path.Combine(baseFolder, "ContasReceber.csv")
+                //    );
 
                 Console.WriteLine("\n\n>>> PROCESSO FINALIZADO! <<<");
             }

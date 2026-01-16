@@ -24,6 +24,14 @@ namespace MigrationProject
             return 0;
         }
 
+        public static decimal GetDecimal(DataRow row, int index)
+        {
+            string val = GetVal(row, index);
+            if (string.IsNullOrWhiteSpace(val)) return 0;
+            if (decimal.TryParse(val.Replace(".", ","), NumberStyles.Any, new CultureInfo("pt-BR"), out decimal d)) return d;
+            return 0;
+        }
+
         public static DateTime? GetDate(DataRow row, string colName)
         {
             string val = GetVal(row, colName);
@@ -32,14 +40,12 @@ namespace MigrationProject
             return null;
         }
 
-        internal static DateTime GetDate(DataRow row, int v)
+        public static DateTime? GetDate(DataRow row, int index)
         {
-            throw new NotImplementedException();
-        }
-
-        internal static decimal GetDecimal(DataRow row, int v)
-        {
-            throw new NotImplementedException();
+            string val = GetVal(row, index);
+            if (string.IsNullOrWhiteSpace(val) || val.ToUpper() == "NULL") return null;
+            if (DateTime.TryParse(val, out DateTime d)) return d;
+            return null;
         }
     }
 }
